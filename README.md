@@ -17,7 +17,7 @@ For simplicity we are using just two AWS Lambda functions. One Lambda function t
 
 ## Architecture Diagram
 
-![Architecture](/Observability-Driven-Development/img/Architecture.png)
+![Architecture](/img/Architecture.png)
 
 # Sample Environment Deployment
 ## Build & Deploy
