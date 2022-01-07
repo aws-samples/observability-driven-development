@@ -50,7 +50,7 @@ Building in a container will help alleviate any local dependency issues.
 
 This command will package and deploy your application to AWS, with a series of prompts:
 
-- **Stack Name:** The name of the stack to deploy to AWS CloudFormation. This should be unique to your account and region. We will use `observability-driven-development ` throughout this project.
+- **Stack Name:** The name of the stack to deploy to AWS CloudFormation. This should be unique to your account and region. We will use `observability-driven-development` throughout this project.
 - **AWS Region:** The AWS region you want to deploy your app to.
   Confirm changes before deploy: If set to yes, any change sets will be shown to you before execution for manual review. If set to no, the AWS SAM CLI will automatically deploy application changes.
 - **Allow SAM CLI IAM role creation:** Many AWS SAM templates, including this example, create AWS IAM roles required for the AWS Lambda function(s) included to access AWS services. By default, these are scoped down to minimum required permissions. To deploy an AWS CloudFormation stack that creates or modified IAM roles, the `CAPABILITY_IAM` value for `capabilities` must be provided. If permission isn’t provided through this prompt, to deploy this example you must explicitly pass `--capabilities CAPABILITY_IAM` to the `sam deploy` command.
@@ -73,6 +73,28 @@ Follow the instructions [here](https://catalog.us-east-1.prod.workshops.aws/v2/w
 ## Conclusion
 
 When you're done using this application, you may delete the resources you created to avoid ongoing charges. You can use the AWS CLI, AWS Management Consoles, or the AWS APIs to delete the CloudFormation stack deployed by SAM. You can also delete the CloudWatch logs for both the Lambda functions to avoid incurring charges there as well.
+
+## Clean Up Resources
+
+To avoid further charges for resources you used during this tutorial, delete the resources created by your AWS SAM template and the CloudWatch logs created by your Lambda validation functions. 
+
+### To delete your AWS CloudFormation stack 
+
+1. Sign in to the AWS Management Console and open the AWS CloudFormation console at https://console.aws.amazon.com/cloudformation
+
+2. In the Stacks column, choose your `observability-driven-development` stack, and then choose Delete.
+
+3. When prompted, choose Delete stack. The Lambda functions, CodeDeploy application and deployment group, and IAM roles created by AWS SAM are deleted.
+
+### To delete your logs in CloudWatch Logs 
+
+1. Open the CloudWatch console at https://console.aws.amazon.com/cloudwatch/
+
+2. From the navigation pane, choose Logs.
+
+3. From the list of log groups, choose the button next to /aws/lambda/
+
+4. From Actions, choose Delete log group, and then choose Yes, Delete.
 
 ## License Summary
 
