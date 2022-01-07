@@ -1,8 +1,8 @@
-# Operations Driven Development
+# Observability Driven Development
 
-Operations Driven Development elevates application and infrastructure observability to primary concerns in the development lifecycle. Operational health, security, compliance and business impact are instrumented early in the life cycle to provide comprehensive observability before, during, and after application deployments.
+Observability Driven Development elevates application and infrastructure observability to primary concerns in the development lifecycle. Operational health, security, compliance and business impact are instrumented early in the life cycle to provide comprehensive observability before, during, and after application deployments.
 
-Operations Driven Development aligns with development models like Test Driven Development and Behavior Driven Development:
+Observability Driven Development aligns with development models like Test Driven Development and Behavior Driven Development:
 
 Application components can be stubbed out at the start of development; they do not need to be in their final forms.
 Observing infrastructure and deployment pipelines ensures environment differences and defects introduce during deployment are observable.
@@ -50,7 +50,7 @@ Building in a container will help alleviate any local dependency issues.
 
 This command will package and deploy your application to AWS, with a series of prompts:
 
-- **Stack Name:** The name of the stack to deploy to AWS CloudFormation. This should be unique to your account and region. We will use `mwaa-dashboard` throughout this project.
+- **Stack Name:** The name of the stack to deploy to AWS CloudFormation. This should be unique to your account and region. We will use `observability-driven-development ` throughout this project.
 - **AWS Region:** The AWS region you want to deploy your app to.
   Confirm changes before deploy: If set to yes, any change sets will be shown to you before execution for manual review. If set to no, the AWS SAM CLI will automatically deploy application changes.
 - **Allow SAM CLI IAM role creation:** Many AWS SAM templates, including this example, create AWS IAM roles required for the AWS Lambda function(s) included to access AWS services. By default, these are scoped down to minimum required permissions. To deploy an AWS CloudFormation stack that creates or modified IAM roles, the `CAPABILITY_IAM` value for `capabilities` must be provided. If permission isn’t provided through this prompt, to deploy this example you must explicitly pass `--capabilities CAPABILITY_IAM` to the `sam deploy` command.
