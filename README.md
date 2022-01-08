@@ -83,7 +83,7 @@ Observability Driven Development promotes observability as a primary concern in 
 
 ## Clean Up Resources
 
-To avoid further charges for resources you used during this tutorial, delete the resources created by your AWS SAM template and the CloudWatch logs created by your Lambda validation functions. 
+To avoid further charges for resources you used during this tutorial, delete the resources created by your AWS SAM template and the CloudWatch logs created by your Lambda functions. 
 
 ### To delete your AWS CloudFormation stack 
 
@@ -92,6 +92,10 @@ To avoid further charges for resources you used during this tutorial, delete the
 2. In the Stacks column, choose your `observability-driven-development` stack, and then choose Delete.
 
 3. When prompted, choose Delete stack. The Lambda functions, API Gateway APIs, CloudWatch Log Groups, and deployment group, and IAM roles created by AWS SAM are deleted.
+
+Or:
+
+Run `sam delete`
 
 ## License Summary
 
