@@ -30,7 +30,7 @@ For simplicity we are using just two AWS Lambda functions. One Lambda function t
 
 ### Build and deploy the sample application
 
-Deploy the architure represented in the [Architecture Diagram](#architecture-diagram) to have a sample application running on your AWS account to follow the activities in the workshop. 
+Deploy the architecture represented in the [Architecture Diagram](#architecture-diagram) to have a sample application running on your AWS account to follow the activities in the workshop. 
 
 ### Clone the Repo
 
