@@ -84,17 +84,7 @@ To avoid further charges for resources you used during this tutorial, delete the
 
 2. In the Stacks column, choose your `observability-driven-development` stack, and then choose Delete.
 
-3. When prompted, choose Delete stack. The Lambda functions, CodeDeploy application and deployment group, and IAM roles created by AWS SAM are deleted.
-
-### To delete your logs in CloudWatch Logs 
-
-1. Open the CloudWatch console at https://console.aws.amazon.com/cloudwatch/
-
-2. From the navigation pane, choose Logs.
-
-3. From the list of log groups, choose the button next to /aws/lambda/
-
-4. From Actions, choose Delete log group, and then choose Yes, Delete.
+3. When prompted, choose Delete stack. The Lambda functions, API Gateway APIs, CloudWatch Log Groups, and deployment group, and IAM roles created by AWS SAM are deleted.
 
 ## License Summary
 
