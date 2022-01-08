@@ -70,9 +70,16 @@ Follow the instructions [here](https://catalog.us-east-1.prod.workshops.aws/v2/w
 
 [**Workshop 4 - Create custom metric**](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/workshop-4-business-metric)
 
-## Conclusion
+## Summary
 
-When you're done using this application, you may delete the resources you created to avoid ongoing charges. You can use the AWS CLI, AWS Management Consoles, or the AWS APIs to delete the CloudFormation stack deployed by SAM. You can also delete the CloudWatch logs for both the Lambda functions to avoid incurring charges there as well.
+Congratulations! You have completed the workshops. Today you learned:
+
+Observability Driven Development promotes observability as a primary concern in the development process.
+- You can provide business value context in metrics and KPIs to observe business value of healthy and impaired systems.
+- You can use AWS X-Ray to analyze distributed applications, thanks to AWS Lambda and Amazon API Gateway native integration.
+- You can create custom Cloudwatch widgets to display business value metrics.
+- You can adding metrics that include versioning to provide additional observability for blue-green, canary and hybrid deployments.
+- You can use custom metrics to extend the information available for observability in your CloudWatch dashboards.
 
 ## Clean Up Resources
 
