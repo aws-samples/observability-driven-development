@@ -11,7 +11,7 @@ Using an Infrastructure as code (IaC) mindset for testing and operations observa
 
 ## Sample solution
 
-The ride share application used in this workshop consists of serverless services such as Amazon API Gateway, AWS Lambda, and Amazon DynamoDB.
+The ride share application used in this [workshop](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/) consists of serverless services such as Amazon API Gateway, AWS Lambda, and Amazon DynamoDB.
 
 For simplicity we are using just two AWS Lambda functions. One Lambda function to insert an Item into a DynamoDB table, and another function to retrieve it using the appropriate unique ID.
 
