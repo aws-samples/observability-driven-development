@@ -57,7 +57,7 @@ This command will package and deploy your application to AWS, with a series of p
 - **Save arguments to** `samconfig.toml`: If set to yes, your choices will be saved to a configuration file inside the project, so that in the future you can just re-run `sam deploy` without parameters to deploy changes to the application.
 
 ## Prepare your environment
-Follow the instructions [here](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/prepare-your-environment).
+Follow the instructions [here](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/prepare-your-environment/in-your-own-account).
 
 ## Workshops
 Follow the instructions [here](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/) to run every workshop.
