@@ -35,7 +35,7 @@ const putItem = async (event) => {
         const data = { id: id, name: name, timestamp: timestamp, milesTraveled: milesTraveled, totalTravelTime: totalTravelTime, price: price }
         
         var params = {
-            TableName: process.env.ODDTable,
+            TableName: process.env.ODD_TABLE,
             Item: data
         }
 
