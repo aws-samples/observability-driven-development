@@ -35,12 +35,28 @@ const putItem = async (event) => {
         const data = { id: id, name: name, timestamp: timestamp, milesTraveled: milesTraveled, totalTravelTime: totalTravelTime, price: price }
         
         var params = {
-            TableName: process.env.SAMPLE_TABLE,
+            TableName: process.env.ODDTable,
             Item: data
         }
 
         await docClient.put(params).promise()
         response = data
+        const cwparams = {
+            MetricData: [
+            {
+                'MetricName': 'TotalPrice',
+                'Dimensions': 
+                [
+                    { 'Name': 'AppName', 'Value': 'Price' }
+                ],
+                
+                'Value': price
+            }
+            ],
+            Namespace: 'builder-session'
+        };
+        console.log(await cloudWatch.putMetricData(cwparams).promise())
+
     } catch (err) {
         throw err
     }

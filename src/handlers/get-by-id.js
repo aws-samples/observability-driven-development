@@ -18,7 +18,7 @@ const getItemById = async (id) => {
   let response
   try {
     var params = {
-      TableName: process.env.SAMPLE_TABLE,
+      TableName: process.env.ODDTable,
       KeyConditionExpression: "#id = :id",
       ExpressionAttributeNames:{
         "#id": "id"

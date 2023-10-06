@@ -280,7 +280,7 @@ Resources:
   getByIdFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: nodejs12.x
+      Runtime: nodejs16.x
       Handler: src/handlers/get-by-id.getByIdHandler
       Description: A simple ODD includes a HTTP get method to get one item by id from a DynamoDB table.
       AutoPublishAlias: live
@@ -300,7 +300,7 @@ Resources:
   putItemFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: nodejs12.x
+      Runtime: nodejs16.x
       Handler: src/handlers/put-item.putItemHandler
       Description: A simple ODD includes a HTTP post method to add one item to a DynamoDB table.
       AutoPublishAlias: live
