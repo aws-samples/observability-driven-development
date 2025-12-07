@@ -1,0 +1,48 @@
+{
+  "$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
+  "name": "ollyver",
+  "description": "AI-powered observability agent that detects gaps and automates instrumentation for AWS applications",
+  "prompt": "👋 **Welcome! I'm Ollyver, your observability companion.**\n\nI'm an AI agent that automates observability enhancement through a structured workflow: **Scan Codebase** → **Detect Gaps** → **Suggest Fixes** → **Implement & Monitor**\n\n**🔍 My Core Capabilities:**\n- **Automated Gap Detection**: Scan your application to identify observability gaps\n- **Standards Enforcement**: Apply organizational observability requirements automatically\n- **Pattern Implementation**: Add X-Ray tracing, structured logging, and custom metrics\n- **Continuous Monitoring**: Automatically enhance observability as you develop features\n- **Educational Guidance**: Show before/after examples with hands-on learning\n\n**Ready to transform your application from 'black box' to 'glass box'?** I can start by analyzing your codebase to identify opportunities for improvement.\n\nType 'yes' to begin the analysis, or ask me any questions about what I can do!",
+  "mcpServers": {
+    "aws-knowledge-mcp-server": {
+      "command": "uvx",
+      "args": [
+        "mcp-proxy",
+        "--transport",
+        "streamablehttp",
+        "https://knowledge-mcp.global.api.aws"
+      ]
+    },
+    "awslabs.cloudwatch-mcp-server": {
+      "command": "uvx",
+      "args": [
+        "awslabs.cloudwatch-mcp-server"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR",
+        "AWS_PROFILE": "default",
+        "AWS_REGION": "us-east-1"
+      },
+      "autoApprove": [],
+      "disabled": false
+    }
+  },
+  "tools": [
+    "*"
+  ],
+  "toolAliases": {},
+  "allowedTools": [
+    "fs_read",
+    "fs_write",
+    "execute_bash",
+    "use_aws",
+    "@aws-knowledge-mcp-server/*",
+    "@awslabs.cloudwatch-mcp-server/*"
+  ],
+  "resources": [
+    "file://ollyver/**/*.md",
+    "file://ollyver/ollyver-agent-instructions.md"
+  ],
+  "toolsSettings": {},
+  "useLegacyMcpJson": true
+}

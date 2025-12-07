@@ -1,5 +1,5 @@
 config:
-  target: "https://example.execute-api.us-east-1.amazonaws.com/Prod"
+  target: "{{ $processEnvironment.URL }}"
   phases:
     - duration: 3000
       arrivalRate: 3
@@ -8,19 +8,20 @@ scenarios:
   - name: "insert ride entries"
     flow:
       - post:
-          url: "/items"
+          url: "/Prod/items"
           json:
             id: "{{ $randomString() }}"
             name: "{{ $randomString() }}"
             milesTraveled: "{{$randomNumber(1,50)}}"
             totalTravelTime: "{{$randomNumber(1,50)}}"
             price: "{{$randomNumber(5,100)}}"
+            tenantId: "{{$randomNumber(1001,1003)}}"
             timestamp: 0
           capture:
             json: "$.id"
             as: "id"
       - get:
-          url: "/items/{{ id }}"
+          url: "/Prod/items/{{ id }}"
           capture:
             json: "$.name"
             as: "name"

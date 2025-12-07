@@ -1,0 +1,171 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Operations-Driven Development - Serverless Application with Observability
+Transform:
+- AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Timeout: 600
+    MemorySize: 256
+    Runtime: python3.11
+    Environment:
+      Variables:
+        APP_NAME:
+          Ref: SampleTable
+        SAMPLE_TABLE:
+          Ref: SampleTable
+        SERVICE_NAME: item_service
+        ENABLE_DEBUG: false
+  Api:
+    TracingEnabled: true
+
+Resources:
+
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: Prod
+
+  getByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: getByIdFunction
+      CodeUri: ../src/handlers/getByIdFunction/
+      Handler: index.lambda_handler      
+      Description: Get method to get one item by id from a DynamoDB table.
+      Layers:
+        - !Sub arn:aws:lambda:${AWS::Region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:18
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: SampleTable
+      - CloudWatchPutMetricPolicy: {}
+      - CloudWatchLambdaInsightsExecutionRolePolicy
+      - AWSXRayDaemonWriteAccess
+      Events:
+        ExplicitApi:
+          Type: HttpApi
+          Properties:
+            ApiId:
+              Ref: HttpApi
+            Path: /items/{id}
+            Method: GET
+
+  putItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: putItemFunction
+      CodeUri: ../src/handlers/putItemFunction/
+      Handler: index.lambda_handler
+      Description: Post method to add one item to a record in DynamoDB table.
+      Layers:
+        - !Sub arn:aws:lambda:${AWS::Region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:18
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: SampleTable
+      - CloudWatchPutMetricPolicy: {}
+      - SNSPublishMessagePolicy:
+          TopicName:
+            Fn::Sub: ${NewItemTopic.TopicName}
+      - CloudWatchLambdaInsightsExecutionRolePolicy
+      - AWSXRayDaemonWriteAccess
+      Environment:
+        Variables:
+          TOPIC_NAME:
+            Ref: NewItemTopic
+      Events:
+        ExplicitApi:
+          Type: HttpApi
+          Properties:
+            ApiId:
+              Ref: HttpApi
+            Path: /items
+            Method: POST
+
+  NewItemTopic:
+    Type: AWS::SNS::Topic
+    
+  SampleTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      ProvisionedThroughput:
+        ReadCapacityUnits: 10
+        WriteCapacityUnits: 5
+      PrimaryKey:
+        Name: id
+        Type: String
+        
+  DashboardSideBySide:
+    Properties:
+      DashboardBody:
+        Fn::Sub:
+        - "{\n  \"widgets\": [\n    {\n      \"height\": 3,\n      \"width\": 9,\n\
+          \      \"y\": 0,\n      \"x\": 0,\n      \"type\": \"metric\",\n      \"\
+          properties\": {\n        \"metrics\": [\n          [\n            \"AWS/Lambda\"\
+          ,\n            \"Invocations\",\n            \"FunctionName\",\n       \
+          \     \"${putItemFunction}\",\n            \"Resource\",\n            \"\
+          ${putItemFunction}\",\n            {\n              \"color\": \"#1f77b4\"\
+          \n            }\n          ],\n          [\n            \".\",\n       \
+          \     \"Errors\",\n            \".\",\n            \".\",\n            \"\
+          .\",\n            \".\",\n            {\n              \"color\": \"#d62728\"\
+          \n            }\n          ]\n        ],\n        \"view\": \"singleValue\"\
+          ,\n        \"stacked\": false,\n        \"region\": \"${AWS::Region}\",\n\
+          \        \"stat\": \"Sum\",\n        \"period\": 60,\n        \"legend\"\
+          : {\n          \"position\": \"bottom\"\n        },\n        \"setPeriodToTimeRange\"\
+          : true,\n        \"title\": \"putItemMetrics\"\n      }\n    },\n    {\n\
+          \      \"height\": 3,\n      \"width\": 9,\n      \"y\": 0,\n      \"x\"\
+          : 9,\n      \"type\": \"metric\",\n      \"properties\": {\n        \"metrics\"\
+          : [\n          [\n            \"AWS/Lambda\",\n            \"Invocations\"\
+          ,\n            \"FunctionName\",\n            \"${getByIdFunction}\",\n\
+          \            \"Resource\",\n            \"${getByIdFunction}\"\n  \
+          \        ],\n          [\n            \".\",\n            \"Errors\",\n\
+          \            \".\",\n            \".\",\n            \".\",\n          \
+          \  \".\",\n            {\n              \"color\": \"#d62728\"\n       \
+          \     }\n          ]\n        ],\n        \"view\": \"singleValue\",\n \
+          \       \"stacked\": false,\n        \"region\": \"${AWS::Region}\",\n \
+          \       \"stat\": \"Sum\",\n        \"period\": 60,\n        \"legend\"\
+          : {\n          \"position\": \"bottom\"\n        },\n        \"setPeriodToTimeRange\"\
+          : true,\n        \"title\": \"getByIdMetrics\"\n      }\n    }\n  ]\n}"
+        - putItemFunction:
+            Ref: putItemFunction
+          getByIdFunction:
+            Ref: getByIdFunction
+      DashboardName: Operations-Dashboard
+    Type: AWS::CloudWatch::Dashboard
+    
+  ApiAccessLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: HttpApi
+    Properties:
+      LogGroupName:
+        Fn::Sub: /aws/apigateway/${HttpApi}
+      RetentionInDays: 7
+
+  GetByIdLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: getByIdFunction
+    Properties:
+      LogGroupName:
+        Fn::Sub: /aws/lambda/${getByIdFunction}
+      RetentionInDays: 7
+      
+  PutItemLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: putItemFunction
+    Properties:
+      LogGroupName:
+        Fn::Sub: /aws/lambda/${putItemFunction}
+      RetentionInDays: 7
+
+Outputs:
+  HttpApiUrl:
+    Description: API Gateway endpoint URL for Prod stage
+    Value:
+      Fn::Sub: https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
+  SampleTable:
+    Value:
+      Fn::GetAtt:
+      - SampleTable
+      - Arn
+    Description: Sample Data Table ARN

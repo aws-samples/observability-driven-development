@@ -114,3 +114,6 @@ samconfig.toml
 .aws-sam/
 .aws-sam/build
 .idea
+
+# Migration documentation (internal use only)
+MIGRATION_SUMMARY.md

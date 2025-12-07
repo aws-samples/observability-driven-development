@@ -1,111 +1,266 @@
-# Observability Driven Development
+# Operations-Driven Development with Ollyver
 
-Observability Driven Development elevates application and infrastructure observability to primary concerns in the development lifecycle. Operational health, security, compliance and business impact are instrumented early in the life cycle to provide comprehensive observability before, during, and after application deployments.
+AI-powered observability automation using the Ollyver agent to transform serverless applications from "black box" to "glass box" observability.
 
-Observability Driven Development aligns with development models like Test Driven Development and Behavior Driven Development:
+---
 
-Application components can be stubbed out at the start of development; they do not need to be in their final forms.
-Observing infrastructure and deployment pipelines ensures environment differences and defects introduce during deployment are observable.
-Automation is leveraged wherever possible to minimize unintended variation in processes.
-Using an Infrastructure as code (IaC) mindset for testing and operations observability improves confidence in workload health and reduces troubleshooting efforts.
+> **📢 Preview Release**
+> 
+> This content is best experienced at an AWS-hosted event using the full workshop: [Operations-Driven Development Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US)
+>
+> **Current Status:** This repository is in **preview mode**. You can currently access and use the Ollyver agent code and configuration. 
+>
+> **Coming Soon:** Full standalone workshop experience with MCP (Model Context Protocol) integration for organizational standards management. Stay tuned for updates!
 
-## Sample solution
+---
 
-The ride share application used in this [workshop](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/) consists of serverless services such as Amazon API Gateway, AWS Lambda, and Amazon DynamoDB.
+## Overview
 
-For simplicity we are using just two AWS Lambda functions. One Lambda function to insert an Item into a DynamoDB table, and another function to retrieve it.
+This project demonstrates **Operations-Driven Development** - an approach that elevates observability to a primary concern in the development lifecycle using AI agents. Meet **Ollyver**, an AI agent that automatically detects observability gaps and implements comprehensive monitoring, logging, and tracing across your serverless applications.
 
-## Architecture Diagram
+## What You'll Learn
+
+This hands-on workshop teaches you how to transform a serverless application from "black box" to "glass box" observability using AI automation. You'll experience:
+
+- **AI-Powered Observability** - Watch Ollyver automatically detect and fix observability gaps
+- **Distributed Tracing** - Implement AWS X-Ray tracing across all services
+- **Structured Logging** - Create JSON logs with tenant attribution and correlation IDs
+- **Custom Metrics** - Build business KPIs and operational dashboards
+- **Organizational Scaling** - Apply consistent observability patterns across teams
+
+### Workshop Format
+
+This is a **self-paced, hands-on workshop** where you'll:
+
+1. **Deploy** a real serverless application to your AWS account
+2. **Discover** observability gaps in the application
+3. **Meet Ollyver** - Your AI observability companion
+4. **Transform** the application with automated instrumentation
+5. **Validate** improvements in AWS CloudWatch and X-Ray
+
+**Time Required:** 2-3 hours  
+**Cost:** Minimal AWS charges (< $5 for workshop duration)
+
+### What is Ollyver?
+
+Ollyver is a specialized AI agent built on [Kiro CLI](https://kiro.dev/) that automates observability implementation. Instead of manually instrumenting code, Ollyver:
+
+- **Scans** your codebase to detect architecture and gaps
+- **Detects** missing observability patterns against organizational standards
+- **Suggests** fixes with educational context
+- **Implements** patterns automatically with AWS deployment
+
+### Key Features
+
+- ✅ **Automated X-Ray Tracing** - Distributed tracing across all services
+- ✅ **Structured Logging** - JSON logs with tenant attribution and correlation IDs
+- ✅ **Custom Business Metrics** - Track KPIs and operational metrics
+- ✅ **CloudWatch Dashboards** - Automated dashboard creation
+- ✅ **Organizational Standards** - Enforce consistent observability patterns
+
+## Architecture
+
+The sample application is a serverless ride-sharing service consisting of:
+
+- **Amazon API Gateway** - HTTP API endpoint
+- **AWS Lambda** - Two functions (putItemFunction, getByIdFunction)
+- **Amazon DynamoDB** - Data storage
+- **CloudWatch** - Logs, metrics, and dashboards
+- **AWS X-Ray** - Distributed tracing
 
 ![Architecture](/img/Architecture.png)
 
-# Sample Environment Deployment
-## Build & Deploy
+## Prerequisites
 
-### Prerequisites
-- An active AWS account
-- AWS CLI configured with account access
-- Docker installed on the local machine
-- [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+- **AWS Account** with CLI configured
+- **AWS CLI** - [Installation Guide](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- **AWS SAM CLI** - [Installation Guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
+- **Docker** - Required for SAM build
+- **Python 3.11+** - For Lambda functions
+- **Kiro CLI** - [Installation Guide](https://kiro.dev/)
 
-### Build and deploy the sample application
+## Quick Start
 
-Deploy the architecture represented in the [Architecture Diagram](#architecture-diagram) to have a sample application running on your AWS account to follow the activities in the workshop. 
+### 1. Clone the Repository
 
-### Clone the Repo
+```bash
+git clone https://github.com/aws-samples/observability-driven-development.git
+cd observability-driven-development
+```
 
-Clone the GitHub repository to your workstation
+### 2. Deploy the Application
 
-`git clone https://github.com/aws-samples/observability-driven-development.git`
+```bash
+cd cloudformation
+sam build
+sam deploy --guided
+```
 
-### Build
+Use stack name: `observability-driven-development`
 
-Building in a container will help alleviate any local dependency issues.
+### 3. Setup Kiro CLI
 
-`sam build --use-container`
+```bash
+# Authenticate with AWS Builder ID
+kiro-cli login --use-device-flow
+```
 
-### Deploy
+### 4. Activate Ollyver Agent
 
-`sam deploy --guided`
+```bash
+# From project root
+kiro-cli chat --agent ollyver
+```
 
-This command will package and deploy your application to AWS, with a series of prompts:
+### 5. Test the Application
 
-- **Stack Name:** The name of the stack to deploy to AWS CloudFormation. This should be unique to your account and region. We will use `observability-driven-development` throughout this project.
-- **AWS Region:** The AWS region you want to deploy your app to.
-  Confirm changes before deploy: If set to yes, any change sets will be shown to you before execution for manual review. If set to no, the AWS SAM CLI will automatically deploy application changes.
-- **Allow SAM CLI IAM role creation:** Many AWS SAM templates, including this example, create AWS IAM roles required for the AWS Lambda function(s) included to access AWS services. By default, these are scoped down to minimum required permissions. To deploy an AWS CloudFormation stack that creates or modified IAM roles, the `CAPABILITY_IAM` value for `capabilities` must be provided. If permission isn’t provided through this prompt, to deploy this example you must explicitly pass `--capabilities CAPABILITY_IAM` to the `sam deploy` command.
-- **Save arguments to** `samconfig.toml`: If set to yes, your choices will be saved to a configuration file inside the project, so that in the future you can just re-run `sam deploy` without parameters to deploy changes to the application.
+```bash
+# Get API endpoint
+export API_URL=$(aws cloudformation describe-stacks \
+  --stack-name observability-driven-development \
+  --query 'Stacks[0].Outputs[?OutputKey==`HttpApiUrl`].OutputValue' \
+  --output text)
 
-## Prepare your environment
-Follow the instructions [here](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/prepare-your-environment/in-your-own-account).
+# Test POST
+curl -X POST ${API_URL}items \
+  -d '{"id":"1a2b3c4d","name":"test user","milesTraveled":"12","totalTravelTime":"600","price":"13.32","tenantId":"1001"}'
 
-## Workshops
-Follow the instructions [here](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/) to run every workshop.
+# Test GET
+curl ${API_URL}items/1a2b3c4d
+```
 
-[**Workshop 1 - Instrumenting With X-Ray**](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/workshop-1-x-ray-instrumentation)
+## Workshop Modules
 
-[**Workshop 2 - Create Custom Widget**](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/workshop-2-create-custom-metric)
+This workshop is organized into modules that guide you through the complete observability transformation journey. **Start with the Introduction** to understand the concepts, then follow the modules in order.
 
-[**Workshop 3 - Debug faster with widgets**](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/workshop-3-deployment-version)
+### Getting Started
 
-[**Workshop 4 - Create custom metric**](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/89b1708b-12ca-4871-a1e4-171c600c2736/en-US/workshop-4-business-metric)
+**📖 [Introduction](docs/introduction.md)** - Start here to understand:
+- What is observability and why it matters
+- The traditional observability gap problem
+- How AI agents solve the developer burden
+- What you'll accomplish in this workshop
 
-## Summary
+**⚙️ [Setup Guide](docs/setup.md)** - Environment setup:
+- Install prerequisites (AWS CLI, SAM CLI, Kiro CLI)
+- Deploy the sample application
+- Configure Ollyver agent
+- Test your deployment
 
-Congratulations! You have completed the workshops. Today you learned:
+### Workshop Modules
 
-Observability Driven Development promotes observability as a primary concern in the development process.
-- You can provide business value context in metrics and KPIs to observe business value of healthy and impaired systems.
-- You can use AWS X-Ray to analyze distributed applications, thanks to AWS Lambda and Amazon API Gateway native integration.
-- You can create custom Cloudwatch widgets to display business value metrics.
-- You can adding metrics that include versioning to provide additional observability for blue-green, canary and hybrid deployments.
-- You can use custom metrics to extend the information available for observability in your CloudWatch dashboards.
+**Module 1: [Explore Your Application](docs/module-1.md)**
+- Examine the serverless ride-sharing application
+- Discover observability gaps manually
+- Understand organizational requirements
+- See the "black box" problem firsthand
 
-## Clean Up Resources
+**Module 2: [Meet Ollyver](docs/module-2.md)**
+- Introduction to the Ollyver AI agent
+- Understand the automated workflow
+- Test Ollyver's knowledge
+- Prepare for transformation
 
-To avoid further charges for resources you used during this tutorial, delete the resources created by your AWS SAM template and the CloudWatch logs created by your Lambda functions. 
+**Module 3: [Closing the Gaps](docs/module-3.md)**
+- Watch Ollyver detect observability gaps
+- Implement X-Ray tracing automatically
+- Add structured logging with correlation IDs
+- Deploy and validate improvements
 
+**Module 4: [Dynamic Requirements](docs/module-4.md)**
+- Adapt to changing organizational standards
+- Implement PII masking in logs
+- See how Ollyver handles evolving requirements
+- Experience continuous observability improvement
 
-### To delete your AWS CloudFormation stack on the console
+**Module 5: [Organizational Scaling](docs/module-5.md)**
+- Scale observability patterns across teams
+- Customize organizational standards
+- Apply consistent patterns organization-wide
+- Build a culture of observability excellence
 
-1. Sign in to the AWS Management Console and open the AWS CloudFormation console at https://console.aws.amazon.com/cloudformation
+## Ollyver Agent Configuration
 
-2. In the Stacks column, choose your `observability-driven-development` stack, and then choose Delete.
+The Ollyver agent is located in the `ollyver/` directory:
 
-3. When prompted, choose Delete stack. The Lambda functions, CodeDeploy application and deployment group, and IAM roles created by AWS SAM are deleted.
+```
+ollyver/
+├── .amazonq/
+│   └── cli-agents/
+│       └── ollyver.json          # Agent configuration
+├── Org-Standards/                 # Organizational requirements
+│   ├── observability-requirements.md
+│   ├── core-patterns.md
+│   └── deployment-guide.md
+├── Approach/                      # Agent workflow
+│   ├── process-overview.md
+│   ├── session-management.md
+│   └── workshop-methodology.md
+└── ollyver-agent-instructions.md  # Agent instructions
+```
 
-### To delete your AWS CloudFormation stack via sam cli
+### Customizing Organizational Standards
 
-`sam delete`
+Edit files in `ollyver/Org-Standards/` to customize observability requirements for your organization:
 
-This command will delete the cloudformation stack with a series of prompts:
+- **observability-requirements.md** - Define your observability standards
+- **core-patterns.md** - Implementation patterns and best practices
+- **deployment-guide.md** - AWS deployment procedures
 
-- **Are you sure you want to delete the stack observability-driven-development in the region <aws-region> ? [y/N]::** 
-choose y
-- **Are you sure you want to delete the folder observability-driven-development in S3 which contains the artifacts? [y/N]:::** 
-choose y
-## License Summary
+## Project Structure
 
-The documentation is made available under the Creative Commons Attribution-ShareAlike 4.0 International License. See the [LICENSE](LICENSE) file.
+```
+observability-driven-development/
+├── cloudformation/              # CloudFormation templates
+│   └── application.yaml         # Main application template
+├── src/handlers/                # Lambda function code
+│   ├── putItemFunction/
+│   └── getByIdFunction/
+├── ollyver/                     # Ollyver agent configuration
+├── docs/                        # Workshop documentation
+├── images/                      # Workshop images
+└── README.md                    # This file
+```
 
-The sample code within this documentation is made available under the MIT-0 license. See the [LICENSE-SAMPLECODE](LICENSE-SAMPLECODE) file.
+## What You'll Learn
+
+By completing this workshop, you will:
+
+- **Understand Observability Fundamentals** - Learn the three pillars (logs, metrics, traces) and why they matter
+- **Experience AI-Powered Automation** - See how AI agents can automate complex observability tasks
+- **Implement Distributed Tracing** - Add AWS X-Ray tracing across Lambda functions and API Gateway
+- **Create Structured Logs** - Build JSON logs with tenant attribution and correlation IDs
+- **Build Custom Metrics** - Track business KPIs and operational metrics in CloudWatch
+- **Scale Organizational Patterns** - Apply consistent observability standards across teams
+- **Master Operations-Driven Development** - Elevate observability as a primary development concern
+
+### Skills You'll Gain
+
+- Working with Kiro CLI and custom AI agents
+- AWS observability services (X-Ray, CloudWatch, Lambda Insights)
+- Serverless application instrumentation
+- Infrastructure as Code with AWS SAM
+- Best practices for production observability
+
+## Clean Up
+
+To avoid ongoing charges, delete the CloudFormation stack:
+
+```bash
+sam delete --stack-name observability-driven-development
+```
+
+Or via AWS Console:
+1. Navigate to CloudFormation console
+2. Select `observability-driven-development` stack
+3. Click **Delete**
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+
+## License
+
+This project is licensed under the MIT-0 License. See the [LICENSE](LICENSE) file for details.
+
+The documentation is made available under the Creative Commons Attribution-ShareAlike 4.0 International License.
